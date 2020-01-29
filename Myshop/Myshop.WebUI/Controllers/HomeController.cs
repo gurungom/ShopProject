@@ -31,7 +31,7 @@ namespace Myshop.WebUI.Controllers
             {
                 products = context.Collection().Where(p => p.Category == Category).ToList();
             }
-            ProdcutListViewMoel model = new ProdcutListViewMoel();
+            ProductViewModel model = new ProductViewModel();
             model.Product = products;
             model.productCategories = categories;
             return View(model);

@@ -41,6 +41,13 @@ namespace Myshop.Services
                     {
                         basket = CreateNewBasket(httpContext);
                     }
+                }           
+            }
+            else
+            {
+                if (CreateIfNull)
+                {
+                    basket = CreateNewBasket(httpContext);
                 }
             }
             return basket;
@@ -69,6 +76,7 @@ namespace Myshop.Services
                 ProductId = ProductId,
                 Quantity=1
                 };
+                basket.BasketItems.Add(item);
             }
             else
             {

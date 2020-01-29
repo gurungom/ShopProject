@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Myshop.core.ViewModels
 {
-  public class ProdcutListViewMoel
+  public class ProductViewModel
     {
         public IEnumerable<Product> Product { get; set; }
         public IEnumerable<ProductCategory> productCategories { get; set; }
