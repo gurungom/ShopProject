@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Myshop.core.Contracts;
+using Myshop.core.Models;
 using Myshop.WebUI.Models;
 
 namespace Myshop.WebUI.Controllers
@@ -17,15 +19,14 @@ namespace Myshop.WebUI.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private IRepository<Customer> CustomerRepository;
 
-        public AccountController()
-        {
-        }
+       
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController( IRepository<Customer> customerRepository)
         {
-            UserManager = userManager;
-            SignInManager = signInManager;
+            
+            this.CustomerRepository = customerRepository;
         }
 
         public ApplicationSignInManager SignInManager
@@ -155,6 +156,19 @@ namespace Myshop.WebUI.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    //Register Customer Model
+                    Customer customer = new Customer()
+                    {
+                        Email = model.Email,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        Address = model.Address,
+                        ZipCode = model.ZipCode,
+                        UserId=user.Id
+                    };
+                    CustomerRepository.Insert(customer);
+                    CustomerRepository.Commit();
+
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
